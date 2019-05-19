@@ -12,6 +12,7 @@ import { DatabaseModule } from './database';
 //  Gateway sockets
 import { AppGateway } from './app.gateway';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
+import { TenantMiddleware } from './common/middlewares/tenant.middleware';
 import { TokenMiddleware } from './common/middlewares/token.middleware';
 
 @Module({
@@ -31,7 +32,7 @@ import { TokenMiddleware } from './common/middlewares/token.middleware';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(LoggerMiddleware, TokenMiddleware)
+      .apply(LoggerMiddleware, TenantMiddleware, TokenMiddleware)
       .forRoutes('*');
   }
 }

@@ -10,16 +10,13 @@ import { Request } from 'express';
 
 import { ITwitterConfig } from '../interfaces/twitter-config.interface';
 
-import { Tenant } from '../../../common/helpers/tenant-model';
-
 const TwitterTokenStrategy = require('passport-twitter-token');
 
 @Injectable()
 export class TwitterStrategy {
   private userModel;
   constructor(
-    @Inject(TWITTER_CONFIG_TOKEN) private readonly twitterConfig: ITwitterConfig,
-    @Inject(DB_CONNECTION_TOKEN) private readonly connection: Connection
+    @Inject(TWITTER_CONFIG_TOKEN) private readonly twitterConfig: ITwitterConfig
   ) {
     this.init();
   }
@@ -31,9 +28,8 @@ export class TwitterStrategy {
       consumerSecret: this.twitterConfig.consumer_secret
     }, async (req: Request, accessToken: string, refreshToken: string, profile: any, done: Function) => {
       try {
-        const params = { request: req, connection: this.connection, model: USER_MODEL_TOKEN, schema: UserSchema };
-        this.userModel = new Tenant<Model<IUser>>(params).getModel();
-        const existingUser: IUser = await this.userModel.findOne({ 'twitter.id': profile.id });
+        const db = req['dbConnection'];
+        this.userModel = db.model(USER_MODEL_TOKEN, UserSchema) as Model<IUser>;        const existingUser: IUser = await this.userModel.findOne({ 'twitter.id': profile.id });
 
         if (existingUser) {
           return done(null, existingUser);

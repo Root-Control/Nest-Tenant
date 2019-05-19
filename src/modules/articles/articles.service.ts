@@ -12,19 +12,14 @@ import { getErrorMessage } from '../../common/helpers/error-handler';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 
-import { Tenant } from '../../common/helpers/tenant-model';
-
 @Injectable()
 export class ArticlesService {
     private articleModel;
     private params;
     private db;
     constructor(@Inject(REQUEST) private readonly request: Request) {
-        console.log('article Service');
-        const db = request['tenantConnection'];
+        const db = request['dbConnection'];
         this.articleModel = db.model(ARTICLE_MODEL_TOKEN, ArticleSchema) as Model<IArticle>;
-
-        let data = this.articleModel.find();
     }
 
     async create(article) {

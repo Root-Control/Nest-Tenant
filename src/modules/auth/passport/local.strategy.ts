@@ -11,14 +11,10 @@ import { MESSAGES, USER_MODEL_TOKEN, DB_CONNECTION_TOKEN } from '../../../server
 
 import { Request } from 'express';
 
-import { Tenant } from '../../../common/helpers/tenant-model';
-
 @Injectable()
 export class LocalStrategy {
   private userModel;
-  constructor(
-    @Inject(DB_CONNECTION_TOKEN) private readonly connection: Connection
-  ) {
+  constructor() {
     this.init();
   }
 
@@ -29,8 +25,8 @@ export class LocalStrategy {
       passwordField: 'password'
     }, async (req: Request, email: string, password: string, done: Function) => {
       try {
-        const params = { request: req, connection: this.connection, model: USER_MODEL_TOKEN, schema: UserSchema };
-        this.userModel = new Tenant<Model<IUser>>(params).getModel();
+        const db = req['dbConnection'];
+        this.userModel = db.model(USER_MODEL_TOKEN, UserSchema) as Model<IUser>;
         const user: IUser = await this.userModel.findOne({ email: email });
 
         if (!user) {

@@ -1,6 +1,7 @@
-import { Schema } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 const illegalUsernames: string[] =  ['meanjs', 'administrator', 'password', 'admin', 'user', 'unknown', 'anonymous', 'null', 'undefined', 'api'];
+console.log('Loading user Schema');
 
 export const UserSchema: Schema = new Schema({
   created: {

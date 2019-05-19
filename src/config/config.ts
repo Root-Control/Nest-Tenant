@@ -47,8 +47,8 @@ const jwtSecret = extractKey(`${rootPath}/keys/jwt.private.key`);
 const Config: IConfig = {
   development: {
     rootPath,
-    db_uri: 'mongodb://localhost:27017',
-    dbs: ['TEL', 'PIT', 'SAS', 'AMS', 'HIR'],
+    db_uri: 'mongodb://localhost:27017/default',
+    dbs: environmentService.get('DBS'),
     httpPort: 1337,
     wsPort: 1338,
     jwtSecret,
@@ -60,8 +60,8 @@ const Config: IConfig = {
   },
   production: {
     rootPath,
-    dbs: environmentService.get('MONGODB_CONNECTION'),
-    db_uri: 'mongodb://localhost:27017',    
+    db_uri: 'mongodb://localhost:27017/default',   
+    dbs: environmentService.get('DBS'), 
     httpPort: + environmentService.get('HTTP_SERVER_PORT'),
     wsPort: + environmentService.get('WS_PORT'),
     jwtSecret,

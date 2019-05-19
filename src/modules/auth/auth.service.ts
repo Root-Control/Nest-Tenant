@@ -10,8 +10,7 @@ import {
   USER_MODEL_TOKEN,
   FACEBOOK_CONFIG_TOKEN,
   TWITTER_CONFIG_TOKEN,
-  GOOGLE_CONFIG_TOKEN,
-  DB_CONNECTION_TOKEN
+  GOOGLE_CONFIG_TOKEN
 } from '../../server.constants';
 import { IUser } from '../users/interfaces/user.interface';
 import { IToken } from './interfaces/token.interface';
@@ -25,28 +24,26 @@ import { UserSchema } from '../users/schemas/user.schema';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 
-import { Tenant } from '../../common/helpers/tenant-model';
-
 @Injectable()
 export class AuthService {
+  private userModel;
   private url: string;
   private params;
   constructor(
     @Inject(FACEBOOK_CONFIG_TOKEN) private readonly fbConfig: IFacebookConfig,
     @Inject(TWITTER_CONFIG_TOKEN) private readonly twitterConfig: ITwitterConfig,
     @Inject(GOOGLE_CONFIG_TOKEN) private readonly googleConfig: IGoogleConfig,
-    @Inject(DB_CONNECTION_TOKEN) private readonly connection: Connection,
     @Inject(REQUEST) private readonly request: Request
   ) {
-    this.params = { request, connection, model: USER_MODEL_TOKEN, schema: UserSchema };
+    const db = request['dbConnection'];
+    this.userModel = db.model(USER_MODEL_TOKEN, UserSchema) as Model<IUser>;
     this.url = `${SERVER_CONFIG.httpProtocol}://${SERVER_CONFIG.domain}:${SERVER_CONFIG.httpPort}`;
   }
 
   async createUserAndReturnToken(user: IUser): Promise<IToken> {
-    const userModel = new Tenant<Model<IUser>>(this.params).getModel();
     const expiresIn = '48h';
     const salt: string = generateSalt();
-    const newUser: IUser = new userModel({
+    const newUser: IUser = new this.userModel({
       firstName: user.firstName,
       lastName: user.lastName,
       displayName: `${user.firstName} ${user.lastName}`,
@@ -88,8 +85,7 @@ export class AuthService {
   }
 
   async findUserById(id: string): Promise<IUser> {
-    const userModel = new Tenant<Model<IUser>>(this.params).getModel();
-    return await userModel.findById(id);
+    return await this.userModel.findById(id);
   }
 
   async requestFacebookRedirectUri(): Promise<{redirect_uri: string}> {

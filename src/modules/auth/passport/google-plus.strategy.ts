@@ -9,16 +9,12 @@ import { IUser } from '../../users/interfaces/user.interface';
 import { UserSchema } from '../../users/schemas/user.schema';
 
 import { Request } from 'express';
-
-import { Tenant } from '../../../common/helpers/tenant-model';
-
 const GoogleTokenStrategy = require('passport-google-plus-token');
 
 @Injectable()
 export class GoogleStrategy {
   private userModel;
-  constructor(@Inject(GOOGLE_CONFIG_TOKEN) private readonly googleConfig: IGoogleConfig,
-              @Inject(DB_CONNECTION_TOKEN) private readonly connection: Connection) {
+  constructor(@Inject(GOOGLE_CONFIG_TOKEN) private readonly googleConfig: IGoogleConfig) {
     this.init();
   }
 
@@ -31,8 +27,8 @@ export class GoogleStrategy {
 
       try {
         // Set the provider data and include tokens
-        const params = { request: req, connection: this.connection, model: USER_MODEL_TOKEN, schema: UserSchema };
-        this.userModel = new Tenant<Model<IUser>>(params).getModel();
+        const db = req['dbConnection'];
+        this.userModel = db.model(USER_MODEL_TOKEN, UserSchema) as Model<IUser>;
         var providerData = profile._json;
         providerData.accessToken = accessToken;
         providerData.refreshToken = refreshToken;

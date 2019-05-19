@@ -1,14 +1,16 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import * as chalk from 'chalk';
-
+import { getMethodColor } from '../helpers/utils';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
 	use(req, res, next: Function) {
     let logMessage;
     const log = chalk.default;
-    logMessage = `Logger middleware: Url: ${req.baseUrl}`;
-    console.log(log.white(logMessage));
+    const methodColor = getMethodColor(req.method);
+    console.log(methodColor);
+    logMessage = `[URL]: ${req.baseUrl}`;
+    console.log(`[${log[methodColor](req.method)}]-${log.white(req.baseUrl)}`);
     next();
 	}
 }

@@ -10,15 +10,12 @@ import { UserSchema } from '../../users/schemas/user.schema';
 
 import { Request } from 'express';
 
-import { Tenant } from '../../../common/helpers/tenant-model';
-
 const FacebookTokenStrategy = require('passport-facebook-token');
 
 @Injectable()
 export class FacebookStrategy {
   private userModel;
-  constructor(@Inject(FACEBOOK_CONFIG_TOKEN) private readonly fbConfig: IFacebookConfig,
-              @Inject(DB_CONNECTION_TOKEN) private readonly connection: Connection) {
+  constructor(@Inject(FACEBOOK_CONFIG_TOKEN) private readonly fbConfig: IFacebookConfig) {
     this.init();
   }
 
@@ -30,8 +27,8 @@ export class FacebookStrategy {
       profileFields: ['id', 'name', 'displayName', 'emails', 'photos']
     }, async (req: Request, accessToken: string, refreshToken: string, profile: any, done: Function) => {
       try {
-        const params = { request: req, connection: this.connection, model: USER_MODEL_TOKEN, schema: UserSchema };
-        this.userModel = new Tenant<Model<IUser>>(params).getModel();
+        const db = req['dbConnection'];
+        this.userModel = db.model(USER_MODEL_TOKEN, UserSchema) as Model<IUser>;
         var providerData = profile._json;
         providerData.accessToken = accessToken;
         providerData.refreshToken = refreshToken;

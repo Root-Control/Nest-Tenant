@@ -16,8 +16,8 @@ export const databaseProviders = [{
     provide: DB_CONNECTION_TOKEN,
     useFactory: async () => {
         try {
-            console.log(`Connecting to ${SERVER_CONFIG.db_uri}/default`);
-            return await createConnection(`${SERVER_CONFIG.db_uri}/default`, opts);
+            console.log(`Connecting to ${SERVER_CONFIG.db_uri}`);
+            return await createConnection(`${SERVER_CONFIG.db_uri}`, opts);
         } catch (ex) {
             console.log(ex);
         }
