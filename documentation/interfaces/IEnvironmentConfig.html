@@ -93,7 +93,10 @@ las propiedades de nuestro entorno de trabajo.</p>
                                         <a href="#awsSecret">awsSecret</a>
                                 </li>
                                 <li>
-                                        <a href="#db">db</a>
+                                        <a href="#db_uri">db_uri</a>
+                                </li>
+                                <li>
+                                        <a href="#dbs">dbs</a>
                                 </li>
                                 <li>
                                         <a href="#domain">domain</a>
@@ -189,13 +192,13 @@ las propiedades de nuestro entorno de trabajo.</p>
                         <tbody>
                                 <tr>
                                     <td class="col-md-4">
-                                        <a name="db"></a>
-                                        <span class="name"><b>db</b><a href="#db"><span class="icon ion-ios-link"></span></a></span>
+                                        <a name="db_uri"></a>
+                                        <span class="name"><b>db_uri</b><a href="#db_uri"><span class="icon ion-ios-link"></span></a></span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <code>db:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                        <code>db_uri:         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
 </code>
                                     </td>
                                 </tr>
@@ -204,6 +207,35 @@ las propiedades de nuestro entorno de trabajo.</p>
                                     <tr>
                                         <td class="col-md-4">
                                             <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="dbs"></a>
+                                        <span class="name"><b>dbs</b><a href="#dbs"><span class="icon ion-ios-link"></span></a></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>dbs:         <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
 
                                         </td>
                                     </tr>
@@ -432,7 +464,8 @@ let environmentService &#x3D; new EnvironmentService(&#x27;.env&#x27;);
  */
 interface IEnvironmentConfig {
   rootPath: string;
-  db: string;
+  dbs: any;
+  db_uri: string;
   httpPort: number;
   wsPort: number;
   jwtSecret: string;
@@ -470,7 +503,8 @@ const jwtSecret &#x3D; extractKey(&#x60;${rootPath}/keys/jwt.private.key&#x60;);
 const Config: IConfig &#x3D; {
   development: {
     rootPath,
-    db: &#x27;mongodb://localhost:27017/store&#x27;,
+    db_uri: &#x27;mongodb://localhost:27017/default&#x27;,
+    dbs: environmentService.get(&#x27;DBS&#x27;),
     httpPort: 1337,
     wsPort: 1338,
     jwtSecret,
@@ -482,7 +516,8 @@ const Config: IConfig &#x3D; {
   },
   production: {
     rootPath,
-    db: environmentService.get(&#x27;MONGODB_CONNECTION&#x27;),
+    db_uri: &#x27;mongodb://localhost:27017/default&#x27;,   
+    dbs: environmentService.get(&#x27;DBS&#x27;), 
     httpPort: + environmentService.get(&#x27;HTTP_SERVER_PORT&#x27;),
     wsPort: + environmentService.get(&#x27;WS_PORT&#x27;),
     jwtSecret,

@@ -97,45 +97,15 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(userModel: <a href="../interfaces/IUser.html">Model<IUser></a>)</code>
+<code>constructor()</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="8" class="link-to-prism">src/modules/auth/passport/verifier.ts:8</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="9" class="link-to-prism">src/modules/auth/passport/verifier.ts:9</a></div>
                             </td>
                         </tr>
 
-                <tr>
-                    <td class="col-md-4">
-                            <div>
-                                    <b>Parameters :</b>
-                                    <table class="params">
-                                        <thead>
-                                            <tr>
-                                                <td>Name</td>
-                                                    <td>Type</td>
-                                                <td>Optional</td>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                                <tr>
-                                                        <td>userModel</td>
-                                                  
-                                                        <td>
-                                                                        <code><a href="../interfaces/IUser.html" target="_self" >Model&lt;IUser&gt;</a></code>
-                                                        </td>
-                                                  
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
-                                                </tr>
-                                        </tbody>
-                                    </table>
-                            </div>
-                    </td>
-                </tr>
             </tbody>
         </table>
 </section>
@@ -169,8 +139,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="10"
-                            class="link-to-prism">src/modules/auth/passport/verifier.ts:10</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="11"
+                            class="link-to-prism">src/modules/auth/passport/verifier.ts:11</a></div>
                 </td>
             </tr>
 
@@ -251,15 +221,18 @@
 import { Request, Response } from &#x27;express&#x27;;
 import { Model } from &#x27;mongoose&#x27;;
 import { IUser } from &#x27;../../users/interfaces/user.interface&#x27;;
+import { UserSchema } from &#x27;../../users/schemas/user.schema&#x27;;
 import { MESSAGES, USER_MODEL_TOKEN } from &#x27;../../../server.constants&#x27;;
 
 @Injectable()
 export class Verifier implements NestMiddleware {
-  constructor(@Inject(USER_MODEL_TOKEN) private readonly userModel: Model&lt;IUser&gt;) {}
+  constructor() {}
     async use(req: Request, res: Response, next: Function) {
-      const user &#x3D; await this.userModel.findOne({ email: req.body.email });
-      if (!user) next();
-      else return next(new UnauthorizedException(MESSAGES.UNAUTHORIZED_EMAIL_OR_USERNAME_IN_USE));
+		const db &#x3D; req[&#x27;dbConnection&#x27;];
+		this.userModel &#x3D; db.model(USER_MODEL_TOKEN, UserSchema) as Model&lt;IUser&gt;;
+		const user &#x3D; await this.userModel.findOne({ email: req.body.email });
+		if (!user) next();
+		else return next(new UnauthorizedException(MESSAGES.UNAUTHORIZED_EMAIL_OR_USERNAME_IN_USE));
     };
 }
 </code></pre>

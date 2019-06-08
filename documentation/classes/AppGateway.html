@@ -198,8 +198,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="19"
-                            class="link-to-prism">src/app.gateway.ts:19</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="20"
+                            class="link-to-prism">src/app.gateway.ts:20</a></div>
                 </td>
             </tr>
 
@@ -241,6 +241,7 @@ export class AppGateway implements OnGatewayInit {
   @WebSocketServer() server;
 
   constructor() {
+    
   }
 
   afterInit() {
@@ -248,8 +249,8 @@ export class AppGateway implements OnGatewayInit {
     this.server.authenticatedUsers &#x3D; [];
     this.server.sockets.on(&#x27;connection&#x27;, function(socket) {
       this.server.authenticatedUsers.push({ time: 1 });
-      console.log(this.server.authenticatedUsers);
-    }); 
+      console.log(&#x27;User Connected&#x27;);
+    });
   }
 }</code></pre>
     </div>

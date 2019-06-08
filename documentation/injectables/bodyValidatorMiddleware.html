@@ -102,7 +102,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/modules/auth/middlewares/body-validator.middleware.ts:19</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="13" class="link-to-prism">src/modules/auth/middlewares/body-validator.middleware.ts:13</a></div>
                             </td>
                         </tr>
 
@@ -139,8 +139,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="23"
-                            class="link-to-prism">src/modules/auth/middlewares/body-validator.middleware.ts:23</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="17"
+                            class="link-to-prism">src/modules/auth/middlewares/body-validator.middleware.ts:17</a></div>
                 </td>
             </tr>
 
@@ -218,15 +218,9 @@
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {
   BadRequestException,
   NestMiddleware, 
-  Injectable, 
-  Inject } from &#x27;@nestjs/common&#x27;;
-import { Request, Response } from &#x27;express&#x27;;
+  Injectable } from &#x27;@nestjs/common&#x27;;
 import { validate } from &#x27;joi&#x27;;
 import { authUserSchema } from &#x27;../../users/joi/auth-user.joi&#x27;;
-
-import { Model, Types } from &#x27;mongoose&#x27;;
-import { IArticle } from &#x27;../../articles/interfaces/article.interface&#x27;;
-import { MESSAGES, ARTICLE_MODEL_TOKEN } from &#x27;../../../server.constants&#x27;;
 
 @Injectable()
 /**

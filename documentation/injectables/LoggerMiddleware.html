@@ -118,8 +118,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="6"
-                            class="link-to-prism">src/common/middlewares/logger.middleware.ts:6</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="7"
+                            class="link-to-prism">src/common/middlewares/logger.middleware.ts:7</a></div>
                 </td>
             </tr>
 
@@ -196,14 +196,17 @@
     <div class="tab-pane fade  tab-source-code" id="c-source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, NestMiddleware } from &#x27;@nestjs/common&#x27;;
 import * as chalk from &#x27;chalk&#x27;;
+import { getMethodColor } from &#x27;../helpers/utils&#x27;;
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
 	use(req, res, next: Function) {
     let logMessage;
     const log &#x3D; chalk.default;
-    logMessage &#x3D; &#x60;Url: ${req.baseUrl}&#x60;;
-    console.log(log.white(logMessage));
+    const methodColor &#x3D; getMethodColor(req.method);
+    console.log(methodColor);
+    logMessage &#x3D; &#x60;[URL]: ${req.baseUrl}&#x60;;
+    console.log(&#x60;[${log[methodColor](req.method)}]-${log.white(req.baseUrl)}&#x60;);
     next();
 	}
 }</code></pre>

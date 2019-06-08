@@ -87,10 +87,10 @@
                             <a href="#env" title="src/server.constants.ts"><b>env</b>&nbsp;&nbsp;&nbsp;(src/.../server.constants.ts)</a>
                         </li>
                         <li>
-                            <a href="#environmentService" title="src/config/multer.ts"><b>environmentService</b>&nbsp;&nbsp;&nbsp;(src/.../multer.ts)</a>
+                            <a href="#environmentService" title="src/config/config.ts"><b>environmentService</b>&nbsp;&nbsp;&nbsp;(src/.../config.ts)</a>
                         </li>
                         <li>
-                            <a href="#environmentService" title="src/config/config.ts"><b>environmentService</b>&nbsp;&nbsp;&nbsp;(src/.../config.ts)</a>
+                            <a href="#environmentService" title="src/config/multer.ts"><b>environmentService</b>&nbsp;&nbsp;&nbsp;(src/.../multer.ts)</a>
                         </li>
                         <li>
                             <a href="#envService" title="src/server.constants.ts"><b>envService</b>&nbsp;&nbsp;&nbsp;(src/.../server.constants.ts)</a>
@@ -124,6 +124,9 @@
                         </li>
                         <li>
                             <a href="#jwtSecret" title="src/config/config.ts"><b>jwtSecret</b>&nbsp;&nbsp;&nbsp;(src/.../config.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#log" title="src/main.ts"><b>log</b>&nbsp;&nbsp;&nbsp;(src/.../main.ts)</a>
                         </li>
                         <li>
                             <a href="#MESSAGES" title="src/server.constants.ts"><b>MESSAGES</b>&nbsp;&nbsp;&nbsp;(src/.../server.constants.ts)</a>
@@ -504,13 +507,11 @@
                     </tr>
                     <tr>
                         <td class="col-md-4">
-                            <i>Default value : </i><code>[
-  {
-    provide: ARTICLE_MODEL_TOKEN,
-    useFactory: (connection: Connection) &#x3D;&gt; connection.model(&#x27;Article&#x27;, ArticleSchema),
-    inject: [DB_CONNECTION_TOKEN],
-  },
-]</code>
+                            <i>Default value : </i><code>[{
+        provide: ARTICLE_MODEL_TOKEN,
+        useFactory: (connection: Connection) &#x3D;&gt; connection.model(&#x27;Article&#x27;, ArticleSchema),
+        inject: [DB_CONNECTION_TOKEN]
+}]</code>
                         </td>
                     </tr>
 
@@ -714,7 +715,8 @@
                             <i>Default value : </i><code>{
   development: {
     rootPath,
-    db: &#x27;mongodb://localhost:27017/store&#x27;,
+    db_uri: &#x27;mongodb://localhost:27017/default&#x27;,
+    dbs: environmentService.get(&#x27;DBS&#x27;),
     httpPort: 1337,
     wsPort: 1338,
     jwtSecret,
@@ -726,7 +728,8 @@
   },
   production: {
     rootPath,
-    db: environmentService.get(&#x27;MONGODB_CONNECTION&#x27;),
+    db_uri: &#x27;mongodb://localhost:27017/default&#x27;,   
+    dbs: environmentService.get(&#x27;DBS&#x27;), 
     httpPort: + environmentService.get(&#x27;HTTP_SERVER_PORT&#x27;),
     wsPort: + environmentService.get(&#x27;WS_PORT&#x27;),
     jwtSecret,
@@ -847,20 +850,17 @@
                     </tr>
                     <tr>
                         <td class="col-md-4">
-                            <i>Default value : </i><code>[
-  {
+                            <i>Default value : </i><code>[{
     provide: DB_CONNECTION_TOKEN,
     useFactory: async () &#x3D;&gt; {
-      try {
-        console.log(&#x60;Connecting to ${ SERVER_CONFIG.db }, ${ opts }&#x60;);
-        return await connect(&#x60;${SERVER_CONFIG.db}&#x60;, opts);
-      } catch (ex) {
-        console.log(ex);
-      }
-      
-    },
-  },
-]</code>
+        try {
+            console.log(&#x60;Connecting to ${SERVER_CONFIG.db_uri}&#x60;);
+            return await createConnection(&#x60;${SERVER_CONFIG.db_uri}&#x60;, opts);
+        } catch (ex) {
+            console.log(ex);
+        }
+    }   
+}]</code>
                         </td>
                     </tr>
 
@@ -889,7 +889,7 @@
                         <td class="col-md-4">
                             <i>Default value : </i><code>{
     useCreateIndex: true,
- 	useNewUrlParser: true,
+    useNewUrlParser: true,
     keepAlive: true,
     socketTimeoutMS: 30000,
     poolSize: 100,
@@ -1323,6 +1323,30 @@ Params - none</p>
             </tbody>
         </table>
 </section>
+    <h3>src/main.ts</h3>
+    <section>
+    <h3></h3>        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="log"></a>
+                        <span class="name">
+                            <b>
+                            log</b>
+                            <a href="#log"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>chalk.default</code>
+                        </td>
+                    </tr>
+
+
+            </tbody>
+        </table>
+</section>
     <h3>src/common/helpers/converters.ts</h3>
     <section>
     <h3></h3>        <table class="table table-sm table-bordered">
@@ -1457,13 +1481,11 @@ Params - none</p>
                     </tr>
                     <tr>
                         <td class="col-md-4">
-                            <i>Default value : </i><code>[
-  {
-    provide: USER_MODEL_TOKEN,
-    useFactory: (connection: Connection) &#x3D;&gt; connection.model(&#x27;User&#x27;, UserSchema),
-    inject: [DB_CONNECTION_TOKEN],
-  },
-]</code>
+                            <i>Default value : </i><code>[{
+        provide: USER_MODEL_TOKEN,
+        useFactory: (connection: Connection) &#x3D;&gt; connection.model(&#x27;User&#x27;, UserSchema),
+        inject: [DB_CONNECTION_TOKEN]
+}]</code>
                         </td>
                     </tr>
 

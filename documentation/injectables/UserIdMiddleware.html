@@ -66,6 +66,21 @@
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#userModel">userModel</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
 
                 <tr>
                     <td class="col-md-4">
@@ -97,45 +112,15 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(userModel: <a href="../interfaces/IUser.html">Model<IUser></a>)</code>
+<code>constructor()</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="13" class="link-to-prism">src/modules/users/middlewares/userbyId.middleware.ts:13</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="18" class="link-to-prism">src/modules/users/middlewares/userbyId.middleware.ts:18</a></div>
                             </td>
                         </tr>
 
-                <tr>
-                    <td class="col-md-4">
-                            <div>
-                                    <b>Parameters :</b>
-                                    <table class="params">
-                                        <thead>
-                                            <tr>
-                                                <td>Name</td>
-                                                    <td>Type</td>
-                                                <td>Optional</td>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                                <tr>
-                                                        <td>userModel</td>
-                                                  
-                                                        <td>
-                                                                        <code><a href="../interfaces/IUser.html" target="_self" >Model&lt;IUser&gt;</a></code>
-                                                        </td>
-                                                  
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
-                                                </tr>
-                                        </tbody>
-                                    </table>
-                            </div>
-                    </td>
-                </tr>
             </tbody>
         </table>
 </section>
@@ -162,15 +147,15 @@
             <tr>
                 <td class="col-md-4">
                     <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>use(req, res, next: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" target="_blank">Function</a>)</code>
+                    <code>use(request, response, next: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" target="_blank">Function</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="15"
-                            class="link-to-prism">src/modules/users/middlewares/userbyId.middleware.ts:15</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="21"
+                            class="link-to-prism">src/modules/users/middlewares/userbyId.middleware.ts:21</a></div>
                 </td>
             </tr>
 
@@ -190,7 +175,7 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>req</td>
+                                    <td>request</td>
                                     <td>
                                     </td>
 
@@ -201,7 +186,7 @@
 
                                 </tr>
                                 <tr>
-                                    <td>res</td>
+                                    <td>response</td>
                                     <td>
                                     </td>
 
@@ -240,6 +225,34 @@
         </tbody>
     </table>
 </section>
+            <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="userModel"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                            userModel</b>
+                            <a href="#userModel"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="18" class="link-to-prism">src/modules/users/middlewares/userbyId.middleware.ts:18</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
 
     </div>
 
@@ -252,22 +265,30 @@
   Injectable, 
   Inject } from &#x27;@nestjs/common&#x27;;
 import { Request, Response } from &#x27;express&#x27;;
-import { Model, Types } from &#x27;mongoose&#x27;;
-import { IUser } from &#x27;../../users/interfaces/user.interface&#x27;;
+import { Model, Types, Connection } from &#x27;mongoose&#x27;;
+import { IUser } from &#x27;./../interfaces/user.interface&#x27;;
+import { UserSchema } from &#x27;./../schemas/user.schema&#x27;;
+
 import { MESSAGES, USER_MODEL_TOKEN } from &#x27;../../../server.constants&#x27;;
+
+import { REQUEST } from &#x27;@nestjs/core&#x27;;
 
 @Injectable()
 export class UserIdMiddleware implements NestMiddleware {
-  constructor(@Inject(USER_MODEL_TOKEN) private readonly userModel: Model&lt;IUser&gt;) {}
-    async use(req, res, next: Function) {
+  private userModel;
+  constructor() {
+  }
+    async use(request, response, next: Function) {
+      const db &#x3D; request[&#x27;dbConnection&#x27;];
+      this.userModel &#x3D; db.model(USER_MODEL_TOKEN, UserSchema) as Model&lt;IUser&gt;;
       const allowedRoutes &#x3D; [&#x27;me&#x27;, &#x27;upload&#x27;];
-      const isAllowedRoute &#x3D; (allowedRoutes.indexOf(req.params.id) &gt; -1);
+      const isAllowedRoute &#x3D; (allowedRoutes.indexOf(request.params.id) &gt; -1);
       if(isAllowedRoute) return next();
 
-      else if(!Types.ObjectId.isValid(req.params.id)) return next(new UnauthorizedException(&#x27;User is invalid&#x27;));
-      const user &#x3D; await this.userModel.findById(req.params.id).select(&#x27;-local.salt  -local.hashedPassword&#x27;);
+      else if(!Types.ObjectId.isValid(request.params.id)) return next(new UnauthorizedException(&#x27;User is invalid&#x27;));
+      const user &#x3D; await this.userModel.findById(request.params.id).select(&#x27;-local.salt  -local.hashedPassword&#x27;);
       if (user) {
-        req.model &#x3D; user;
+        request.model &#x3D; user;
         next();
       }
       else return next(new UnauthorizedException(&#x27;No user with that identifier has been found&#x27;));

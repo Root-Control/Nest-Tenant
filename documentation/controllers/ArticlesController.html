@@ -228,8 +228,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="119"
-                            class="link-to-prism">src/modules/articles/articles.controller.ts:119</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="121"
+                            class="link-to-prism">src/modules/articles/articles.controller.ts:121</a></div>
                 </td>
             </tr>
 
@@ -303,8 +303,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="80"
-                            class="link-to-prism">src/modules/articles/articles.controller.ts:80</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="82"
+                            class="link-to-prism">src/modules/articles/articles.controller.ts:82</a></div>
                 </td>
             </tr>
 
@@ -372,14 +372,14 @@
                 <td class="col-md-4">
                     <b>Decorators : </b>
                     <br />
-                    <code>@Get(&#x27;&#x27;)<br />@Roles(&#x27;admin&#x27;)<br /></code>
+                    <code>@Get(&#x27;&#x27;)<br />@Roles(&#x27;user&#x27;, &#x27;admin&#x27;)<br /></code>
                 </td>
             </tr>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="52"
-                            class="link-to-prism">src/modules/articles/articles.controller.ts:52</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="53"
+                            class="link-to-prism">src/modules/articles/articles.controller.ts:53</a></div>
                 </td>
             </tr>
 
@@ -453,8 +453,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="106"
-                            class="link-to-prism">src/modules/articles/articles.controller.ts:106</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="108"
+                            class="link-to-prism">src/modules/articles/articles.controller.ts:108</a></div>
                 </td>
             </tr>
 
@@ -528,8 +528,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="93"
-                            class="link-to-prism">src/modules/articles/articles.controller.ts:93</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="95"
+                            class="link-to-prism">src/modules/articles/articles.controller.ts:95</a></div>
                 </td>
             </tr>
 
@@ -585,6 +585,7 @@
   Delete,
   Param,
   UseGuards,
+  Inject,
   Req } from &#x27;@nestjs/common&#x27;;
 
 import { ArticlesService } from &#x27;./articles.service&#x27;;
@@ -598,7 +599,7 @@ import { ArticlesGateway } from &#x27;../articles/articles.gateway&#x27;;
 @Controller(&#x27;articles&#x27;)
 @UseGuards(RolesGuard)
 export class ArticlesController {
-  constructor(private readonly articlesService: ArticlesService, 
+  constructor(@Inject(ArticlesService) private readonly articlesService, 
               private readonly articlesSocket: ArticlesGateway) {
   }
   /* --------------------------------------------------------------------
@@ -626,10 +627,9 @@ export class ArticlesController {
   */
 
   @Get(&#x27;&#x27;)
-  @Roles(&#x27;admin&#x27;)
+  @Roles(&#x27;user&#x27;, &#x27;admin&#x27;)
   async list(@Req() req) {
     const articles &#x3D; await this.articlesService.list();
-    this.articlesSocket.sendArticlesListFromSocket(articles);
   	return articles;
   }
 
@@ -644,7 +644,9 @@ export class ArticlesController {
   async create(@Req() req) {
     let article &#x3D; req.body;
     article.creator &#x3D; req.user._id;
-    return await this.articlesService.create(article);
+    await this.articlesService.create(article);
+    this.articlesSocket.sendCreatedArticle(article);
+    return article;
   }
 
   /* 

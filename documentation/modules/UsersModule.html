@@ -200,8 +200,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="23"
-                            class="link-to-prism">src/modules/users/users.module.ts:23</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="27"
+                            class="link-to-prism">src/modules/users/users.module.ts:27</a></div>
                 </td>
             </tr>
 
@@ -274,9 +274,12 @@ import { UserIdMiddleware } from &#x27;./middlewares/userbyId.middleware&#x27;;
     ...userProviders
   ]
 })
-export class UsersModule implements NestModule{
+export class UsersModule implements NestModule {
+    constructor() {
+      // code...
+      console.log(&#x27;users module loaded&#x27;);
+    }
   public configure(consumer: MiddlewareConsumer) {
-
     consumer
       .apply(UserIdMiddleware)
       .forRoutes({ path: &#x27;users/:id&#x27;, method: RequestMethod.ALL });

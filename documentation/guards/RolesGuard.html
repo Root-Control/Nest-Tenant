@@ -105,7 +105,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">src/guards/roles.guard.ts:11</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="5" class="link-to-prism">src/guards/roles.guard.ts:5</a></div>
                             </td>
                         </tr>
 
@@ -172,8 +172,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="16"
-                            class="link-to-prism">src/guards/roles.guard.ts:16</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="10"
+                            class="link-to-prism">src/guards/roles.guard.ts:10</a></div>
                 </td>
             </tr>
 
@@ -228,12 +228,6 @@
             <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, CanActivate, ExecutionContext, Inject } from &#x27;@nestjs/common&#x27;;
 import { Reflector } from &#x27;@nestjs/core&#x27;;
 
-import { IUser } from &#x27;../modules/users/interfaces/user.interface&#x27;;
-import { Model } from &#x27;mongoose&#x27;;
-import { USER_MODEL_TOKEN, SERVER_CONFIG } from &#x27;../server.constants&#x27;;
-
-import { verify } from &#x27;jsonwebtoken&#x27;;
-
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {
@@ -247,7 +241,6 @@ export class RolesGuard implements CanActivate {
     }
     const req &#x3D; context.switchToHttp().getRequest();
     const user &#x3D; req.user;
-    
     const hasRole &#x3D; () &#x3D;&gt; user[&#x27;roles&#x27;].some((role: string) &#x3D;&gt; role.includes(role));
     return user &amp;&amp; user[&#x27;roles&#x27;] &amp;&amp; hasRole();
   }

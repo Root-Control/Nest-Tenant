@@ -8,7 +8,6 @@ let environmentService = new EnvironmentService('.env');
  */
 interface IEnvironmentConfig {
   rootPath: string;
-  dbs: any;
   db_uri: string;
   httpPort: number;
   wsPort: number;
@@ -19,6 +18,7 @@ interface IEnvironmentConfig {
   awsKey: string;
   awsSecret: string;
 }
+
 
 /**
  *  Creamos una interface "IConfig", la cual contendrá a IEnvironmentConfig
@@ -41,14 +41,14 @@ const rootPath = process.cwd();
  */
 const jwtSecret = extractKey(`${rootPath}/keys/jwt.private.key`);
 
+const db = `${environmentService.get('MONGODB_CONNECTION')}:${environmentService.get('MONGODB_PORT')}/${environmentService.get('MONGODB_DATABASE')}`;
 /**
  *  Definimos los valores para local y produccion
  */
 const Config: IConfig = {
   development: {
     rootPath,
-    db_uri: 'mongodb://localhost:27017/default',
-    dbs: environmentService.get('DBS'),
+    db_uri: db || 'mongodb://localhost:27017/thelinkstore-dev',
     httpPort: 1337,
     wsPort: 1338,
     jwtSecret,
@@ -60,8 +60,7 @@ const Config: IConfig = {
   },
   production: {
     rootPath,
-    db_uri: 'mongodb://localhost:27017/default',   
-    dbs: environmentService.get('DBS'), 
+    db_uri: db || 'mongodb://localhost:27017/thelinkstore-prod',    
     httpPort: + environmentService.get('HTTP_SERVER_PORT'),
     wsPort: + environmentService.get('WS_PORT'),
     jwtSecret,

@@ -275,8 +275,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="37"
-                            class="link-to-prism">src/modules/auth/auth.module.ts:37</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="41"
+                            class="link-to-prism">src/modules/auth/auth.module.ts:41</a></div>
                 </td>
             </tr>
 
@@ -364,6 +364,10 @@ import { Verifier } from &#x27;./passport/verifier&#x27;;
   controllers: [AuthController]
 })
 export class AuthModule implements NestModule {
+  constructor() {
+    // code...
+    console.log(&#x27;Auth Module loaded&#x27;);
+  }
   public configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(bodyValidatorMiddleware)

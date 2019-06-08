@@ -209,8 +209,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="32"
-                            class="link-to-prism">src/app.module.ts:32</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="33"
+                            class="link-to-prism">src/app.module.ts:33</a></div>
                 </td>
             </tr>
 
@@ -266,9 +266,9 @@
 import { Module, NestModule, RequestMethod, MiddlewareConsumer } from &#x27;@nestjs/common&#x27;;
 
 // Modules
-import { AuthModule } from &#x27;./modules/auth/auth.module&#x27;;
 import { UsersModule } from &#x27;./modules/users/users.module&#x27;;
 import { ArticlesModule } from &#x27;./modules/articles/articles.module&#x27;;
+import { AuthModule } from &#x27;./modules/auth/auth.module&#x27;;
 
 //  Database import
 import { DatabaseModule } from &#x27;./database&#x27;;
@@ -276,14 +276,15 @@ import { DatabaseModule } from &#x27;./database&#x27;;
 //  Gateway sockets
 import { AppGateway } from &#x27;./app.gateway&#x27;;
 import { LoggerMiddleware } from &#x27;./common/middlewares/logger.middleware&#x27;;
+import { TenantMiddleware } from &#x27;./common/middlewares/tenant.middleware&#x27;;
 import { TokenMiddleware } from &#x27;./common/middlewares/token.middleware&#x27;;
 
 @Module({
 	imports: [
 		DatabaseModule,
-		AuthModule,
 		UsersModule,
-		ArticlesModule
+		ArticlesModule,
+		AuthModule
 	],
 	controllers: [
 	],
@@ -294,9 +295,8 @@ import { TokenMiddleware } from &#x27;./common/middlewares/token.middleware&#x27
 
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-  	console.log(&#x27;conchasumare&#x27;);
     consumer
-      .apply(LoggerMiddleware, TokenMiddleware)
+      .apply(LoggerMiddleware, TenantMiddleware, TokenMiddleware)
       .forRoutes(&#x27;*&#x27;);
   }
 }</code></pre>

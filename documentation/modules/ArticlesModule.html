@@ -200,8 +200,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="27"
-                            class="link-to-prism">src/modules/articles/articles.module.ts:27</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="30"
+                            class="link-to-prism">src/modules/articles/articles.module.ts:30</a></div>
                 </td>
             </tr>
 
@@ -278,7 +278,10 @@ import { articleValidatorMiddleware } from &#x27;../articles/middlewares/article
     ...articleProviders
   ]
 })
-export class ArticlesModule implements NestModule{
+export class ArticlesModule implements NestModule {
+  constructor() {
+  console.log(&#x27;Articles module loaded&#x27;);
+  }
   public configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(articleValidatorMiddleware)

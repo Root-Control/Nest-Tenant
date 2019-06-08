@@ -113,7 +113,7 @@ Entornos de desarrollo y produccion (según se implemente);</p>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/config/config.ts:27</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/config/config.ts:28</a></div>
                             </td>
                         </tr>
             </tbody>
@@ -195,7 +195,8 @@ let environmentService &#x3D; new EnvironmentService(&#x27;.env&#x27;);
  */
 interface IEnvironmentConfig {
   rootPath: string;
-  db: string;
+  dbs: any;
+  db_uri: string;
   httpPort: number;
   wsPort: number;
   jwtSecret: string;
@@ -233,7 +234,8 @@ const jwtSecret &#x3D; extractKey(&#x60;${rootPath}/keys/jwt.private.key&#x60;);
 const Config: IConfig &#x3D; {
   development: {
     rootPath,
-    db: &#x27;mongodb://localhost:27017/store&#x27;,
+    db_uri: &#x27;mongodb://localhost:27017/default&#x27;,
+    dbs: environmentService.get(&#x27;DBS&#x27;),
     httpPort: 1337,
     wsPort: 1338,
     jwtSecret,
@@ -245,7 +247,8 @@ const Config: IConfig &#x3D; {
   },
   production: {
     rootPath,
-    db: environmentService.get(&#x27;MONGODB_CONNECTION&#x27;),
+    db_uri: &#x27;mongodb://localhost:27017/default&#x27;,   
+    dbs: environmentService.get(&#x27;DBS&#x27;), 
     httpPort: + environmentService.get(&#x27;HTTP_SERVER_PORT&#x27;),
     wsPort: + environmentService.get(&#x27;WS_PORT&#x27;),
     jwtSecret,

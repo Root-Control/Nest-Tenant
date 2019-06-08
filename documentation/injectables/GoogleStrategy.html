@@ -66,6 +66,21 @@
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#userModel">userModel</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
 
                 <tr>
                     <td class="col-md-4">
@@ -97,12 +112,12 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(googleConfig: <a href="../interfaces/IGoogleConfig.html">IGoogleConfig</a>, userModel: <a href="../interfaces/IUser.html">Model<IUser></a>)</code>
+<code>constructor(googleConfig: <a href="../interfaces/IGoogleConfig.html">IGoogleConfig</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="13" class="link-to-prism">src/modules/auth/passport/google-plus.strategy.ts:13</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">src/modules/auth/passport/google-plus.strategy.ts:16</a></div>
                             </td>
                         </tr>
 
@@ -124,18 +139,6 @@
                                                   
                                                         <td>
                                                                         <code><a href="../interfaces/IGoogleConfig.html" target="_self" >IGoogleConfig</a></code>
-                                                        </td>
-                                                  
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
-                                                </tr>
-                                                <tr>
-                                                        <td>userModel</td>
-                                                  
-                                                        <td>
-                                                                        <code><a href="../interfaces/IUser.html" target="_self" >Model&lt;IUser&gt;</a></code>
                                                         </td>
                                                   
                                                     <td>
@@ -199,38 +202,70 @@
         </tbody>
     </table>
 </section>
+            <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="userModel"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                            userModel</b>
+                            <a href="#userModel"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">src/modules/auth/passport/google-plus.strategy.ts:16</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
 
     </div>
 
 
     <div class="tab-pane fade  tab-source-code" id="c-source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, Inject } from &#x27;@nestjs/common&#x27;;
-import { Model } from &#x27;mongoose&#x27;;
+import { Model, Connection } from &#x27;mongoose&#x27;;
 import { use } from &#x27;passport&#x27;;
 import { v1 } from &#x27;uuid&#x27;;
 
-import { GOOGLE_CONFIG_TOKEN, USER_MODEL_TOKEN } from &#x27;../../../server.constants&#x27;;
+import { GOOGLE_CONFIG_TOKEN, USER_MODEL_TOKEN, DB_CONNECTION_TOKEN } from &#x27;../../../server.constants&#x27;;
 import { IGoogleConfig } from &#x27;../interfaces/google-config.interface&#x27;;
 import { IUser } from &#x27;../../users/interfaces/user.interface&#x27;;
+import { UserSchema } from &#x27;../../users/schemas/user.schema&#x27;;
 
+import { Request } from &#x27;express&#x27;;
 const GoogleTokenStrategy &#x3D; require(&#x27;passport-google-plus-token&#x27;);
 
 @Injectable()
 export class GoogleStrategy {
-  constructor(
-    @Inject(GOOGLE_CONFIG_TOKEN) private readonly googleConfig: IGoogleConfig,
-    @Inject(USER_MODEL_TOKEN) private readonly userModel: Model&lt;IUser&gt;
-  ) {
+  private userModel;
+  constructor(@Inject(GOOGLE_CONFIG_TOKEN) private readonly googleConfig: IGoogleConfig) {
     this.init();
   }
 
   private init(): void {
     use(&#x27;google&#x27;, new GoogleTokenStrategy({
+      passReqToCallback: true,
       clientID: this.googleConfig.client_id,
       clientSecret: this.googleConfig.client_secret
-    }, async (accessToken: string, refreshToken: string, profile: any, done: Function) &#x3D;&gt; {
+    }, async (req: Request, accessToken: string, refreshToken: string, profile: any, done: Function) &#x3D;&gt; {
+
       try {
         // Set the provider data and include tokens
+        const db &#x3D; req[&#x27;dbConnection&#x27;];
+        this.userModel &#x3D; db.model(USER_MODEL_TOKEN, UserSchema) as Model&lt;IUser&gt;;
         var providerData &#x3D; profile._json;
         providerData.accessToken &#x3D; accessToken;
         providerData.refreshToken &#x3D; refreshToken;
