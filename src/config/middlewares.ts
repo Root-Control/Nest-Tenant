@@ -5,8 +5,8 @@ import * as helmet from 'helmet';
 import { IEnvironmentConfig } from './config';
 
 module.exports = (config: IEnvironmentConfig, app: Application) => {
-  app.use(cookieParser());
-  app.use(helmet());
-  app.use(json());
-  app.use(urlencoded({ extended: true }));
+    app.use(cookieParser());
+    app.use(helmet());
+    app.use(json());
+    app.use(urlencoded({ extended: true }));
 };

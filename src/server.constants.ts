@@ -38,11 +38,10 @@ export const USER_MODEL_TOKEN: string = 'User';
  */
 export const ARTICLE_MODEL_TOKEN: string = 'Article';
 
-
 //  Message definitions
 export const MESSAGES = {
-  UNAUTHORIZED_EMAIL_OR_USERNAME_IN_USE: 'Email or username already exists',
-  UNAUTHORIZED_INVALID_PASSWORD: 'Invalid password',
-  UNAUTHORIZED_INVALID_EMAIL: 'The email does not exist',
-  UNAUTHORIZED_UNRECOGNIZED_BEARER: 'Unrecognized bearer of the token'
+    UNAUTHORIZED_EMAIL_OR_USERNAME_IN_USE: 'Email or username already exists',
+    UNAUTHORIZED_INVALID_PASSWORD: 'Invalid password',
+    UNAUTHORIZED_INVALID_EMAIL: 'The email does not exist',
+    UNAUTHORIZED_UNRECOGNIZED_BEARER: 'Unrecognized bearer of the token'
 };

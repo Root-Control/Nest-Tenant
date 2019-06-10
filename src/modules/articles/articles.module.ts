@@ -5,35 +5,35 @@ import { ArticlesController } from './articles.controller';
 import { articleProviders } from './articles.providers';
 import { ArticlesService } from './articles.service';
 
-import { ArticlesGateway } from './articles.gateway';
-
-import { ArticleIdMiddleware } from './middlewares/articleById.middleware';
+import { ArticleByIdMiddleware } from './middlewares/articleById.middleware';
 //  Middlewares
-import { articleValidatorMiddleware } from '../articles/middlewares/article-validator.middleware';
+import { ArticleValidatorMiddleware } from '../articles/middlewares/article-validator.middleware';
+
+import { AppGateway } from '../../app.gateway';
 
 @Module({
-  imports: [DatabaseModule],
-  controllers: [ArticlesController],
-  providers: [
-    ArticlesGateway,
-    ...articleProviders,
-    ArticlesService
-  ],
-  exports: [
-    ...articleProviders
-  ]
+    imports: [DatabaseModule],
+    controllers: [ArticlesController],
+    providers: [
+        ...articleProviders,
+        ArticlesService,
+        AppGateway
+    ],
+    exports: [
+        ...articleProviders
+    ]
 })
 export class ArticlesModule implements NestModule {
-  constructor() {
-  console.log('Articles module loaded');
-  }
-  public configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(articleValidatorMiddleware)
-      .forRoutes({ path: 'articles', method: RequestMethod.POST });
+    constructor() {
+        console.log('Articles module loaded');
+    }
+    public configure(consumer: MiddlewareConsumer) {
+        consumer
+            .apply(ArticleValidatorMiddleware)
+            .forRoutes({ path: 'articles', method: RequestMethod.POST });
 
-    consumer.apply(ArticleIdMiddleware)
-      .forRoutes({ path: 'articles/:articleId', method: RequestMethod.ALL });
-      //  users id calling middleware for findById users before run another methods like "delete/update/read"
-  }
+        consumer.apply(ArticleByIdMiddleware)
+            .forRoutes({ path: 'articles/:articleId', method: RequestMethod.ALL });
+        //  users id calling middleware for findById users before run another methods like "delete/update/read"
+    }
 }

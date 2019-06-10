@@ -4,16 +4,16 @@ import { twitterConfig } from './config/twitter-config';
 import { googleConfig } from './config/google-config';
 
 export const authProviders = [
-  {
-    provide: FACEBOOK_CONFIG_TOKEN,
-    useValue: facebookConfig
-  },
-  {
-    provide: TWITTER_CONFIG_TOKEN,
-    useValue: twitterConfig
-  },
-  {
-    provide: GOOGLE_CONFIG_TOKEN,
-    useValue: googleConfig
-  }
+    {
+        provide: FACEBOOK_CONFIG_TOKEN,
+        useValue: facebookConfig
+    },
+    {
+        provide: TWITTER_CONFIG_TOKEN,
+        useValue: twitterConfig
+    },
+    {
+        provide: GOOGLE_CONFIG_TOKEN,
+        useValue: googleConfig
+    }
 ];

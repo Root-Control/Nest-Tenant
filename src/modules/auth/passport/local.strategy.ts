@@ -13,34 +13,35 @@ import { Request } from 'express';
 
 @Injectable()
 export class LocalStrategy {
-  private userModel;
-  constructor() {
-    this.init();
-  }
+    private userModel;
+    constructor() {
+        this.init();
+    }
 
-  private init(): void {
-    use('local-signin', new Strategy({
-      passReqToCallback: true,
-      usernameField: 'email',
-      passwordField: 'password'
-    }, async (req: Request, email: string, password: string, done: Function) => {
-      try {
-        const db = req['dbConnection'];
-        this.userModel = db.model(USER_MODEL_TOKEN, UserSchema) as Model<IUser>;
-        const user: IUser = await this.userModel.findOne({ email: email });
+    private init(): void {
+        use('local-signin', new Strategy({
+            passReqToCallback: true,
+            usernameField: 'email',
+            passwordField: 'password'
+        }, async (req: Request, email: string, password: string, done: Function) => {
+            try {
+                console.log(email, password);
+                const db = req['dbConnection'];
+                this.userModel = db.model(USER_MODEL_TOKEN, UserSchema) as Model<IUser>;
+                const user: IUser = await this.userModel.findOne({ email });
 
-        if (!user) {
-          return done(new UnauthorizedException(MESSAGES.UNAUTHORIZED_INVALID_EMAIL), false);
-        }
+                if (!user) {
+                    return done(new UnauthorizedException(MESSAGES.UNAUTHORIZED_INVALID_EMAIL), false);
+                }
 
-        if (generateHashedPassword(user.salt, password) !== user.password) {
-          return done(new UnauthorizedException(MESSAGES.UNAUTHORIZED_INVALID_PASSWORD), false);
-        }
+                if (generateHashedPassword(user.salt, password) !== user.password) {
+                    return done(new UnauthorizedException(MESSAGES.UNAUTHORIZED_INVALID_PASSWORD), false);
+                }
 
-        done(null, user);
-      } catch (error) {
-        done(error, false);
-      }
-    }));
-  }
+                done(null, user);
+            } catch (error) {
+                done(error, false);
+            }
+        }));
+    }
 }

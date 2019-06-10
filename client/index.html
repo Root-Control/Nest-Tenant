@@ -3,7 +3,7 @@
 <head>
     <script src="socket.io.js"></script>
     <script>
-        let url = 'http://192.168.1.33:1337';
+        let url = 'http://localhost:1337';
         //  const socket = io('http://localhost:8080', {transports: ['websocket', 'polling', 'flashsocket']});
         socket = io(url);
         socket.connect();
@@ -14,7 +14,7 @@
             socket.emit('events', { connection: true });
             socket.emit('identity', 0, (response) => console.log('Identity:', response));
         });
-        socket.on('articles', function (data) {
+        socket.on('articleChannel', function (data) {
             console.log('article', data);
         });
         socket.on('exception', function (data) {

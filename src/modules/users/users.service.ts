@@ -48,15 +48,15 @@ export class UserService {
         const twitter = user.twitter.id;
         const facebook = user.facebook.id;
 
-        if(google) {
-          //  Do stuff updating google
-      } else if (twitter) {
-          //  Do stuff updating twitter
-      } else if (facebook) {
-          //  Do stuff updating facebook
-      } else {
-          //  Do stuff updating local
-      }
-      return user;
+        if (google) {
+            //  Do stuff updating google
+        } else if (twitter) {
+            //  Do stuff updating twitter
+        } else if (facebook) {
+            //  Do stuff updating facebook
+        } else {
+            //  Do stuff updating local
+        }
+        return user;
     }
 }

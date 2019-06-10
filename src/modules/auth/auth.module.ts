@@ -1,8 +1,8 @@
 import {
-  Module,
-  NestModule,
-  MiddlewareConsumer,
-  RequestMethod,
+    Module,
+    NestModule,
+    MiddlewareConsumer,
+    RequestMethod,
 } from '@nestjs/common';
 import { authenticate } from 'passport';
 
@@ -17,45 +17,49 @@ import { UsersModule } from '../users/users.module';
 import { authProviders } from './auth.providers';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { bodyValidatorMiddleware } from './middlewares/body-validator.middleware';
+
+//  Middlewares
+import { BodyValidatorMiddleware } from './middlewares/body-validator.middleware';
+import { LoginValidatorMiddleware } from './middlewares/login-validator.middleware';
+
 import { Verifier } from './passport/verifier';
 
 @Module({
-  imports: [UsersModule],
-  providers: [
-    ...authProviders,
-    AuthService,
-    LocalStrategy,
-    JwtStrategy,
-    FacebookStrategy,
-    TwitterStrategy,
-    GoogleStrategy
-  ],
-  controllers: [AuthController]
+    imports: [UsersModule],
+    providers: [
+        ...authProviders,
+        AuthService,
+        LocalStrategy,
+        JwtStrategy,
+        FacebookStrategy,
+        TwitterStrategy,
+        GoogleStrategy
+    ],
+    controllers: [AuthController]
 })
 export class AuthModule implements NestModule {
-  constructor() {
-    // code...
-    console.log('Auth Module loaded');
-  }
-  public configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(bodyValidatorMiddleware)
-      .forRoutes('auth/local/signup');
-    consumer
-      .apply(authenticate('local-signin', { session: false }))
-      .forRoutes('auth/local/signin');
+    constructor() {
+        // code...
+        console.log('Auth Module loaded');
+    }
+    public configure(consumer: MiddlewareConsumer) {
+        consumer
+            .apply(BodyValidatorMiddleware)
+            .forRoutes('auth/local/signup');
+        consumer
+            .apply(LoginValidatorMiddleware, authenticate('local-signin', { session: false }))
+            .forRoutes('auth/local/signin');
 
-    consumer
-      .apply(authenticate('facebook', { session: false }))
-      .forRoutes('auth/facebook/token');
+        consumer
+            .apply(authenticate('facebook', { session: false }))
+            .forRoutes('auth/facebook/token');
 
-    consumer
-      .apply(authenticate('twitter', { session: false }))
-      .forRoutes('auth/twitter/token');
+        consumer
+            .apply(authenticate('twitter', { session: false }))
+            .forRoutes('auth/twitter/token');
 
-    consumer
-      .apply(authenticate('google', { session: false }))
-      .forRoutes('auth/google/token');
-  }
+        consumer
+            .apply(authenticate('google', { session: false }))
+            .forRoutes('auth/google/token');
+    }
 }

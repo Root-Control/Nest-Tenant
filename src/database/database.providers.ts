@@ -1,7 +1,7 @@
 import { connect, createConnection } from 'mongoose';
 import { SERVER_CONFIG, DB_CONNECTION_TOKEN } from '../server.constants';
 
- const opts = {
+const opts = {
     useCreateIndex: true,
     useNewUrlParser: true,
     keepAlive: true,
@@ -9,8 +9,8 @@ import { SERVER_CONFIG, DB_CONNECTION_TOKEN } from '../server.constants';
     poolSize: 100,
     reconnectTries: Number.MAX_VALUE,
     reconnectInterval: 500,
-    autoReconnect: true,
-  };
+    autoReconnect: true
+};
 
 export const databaseProviders = [{
     provide: DB_CONNECTION_TOKEN,
@@ -21,10 +21,5 @@ export const databaseProviders = [{
         } catch (ex) {
             console.log(ex);
         }
-    }   
+    }
 }];
-
-console.log(databaseProviders);
-
-
-

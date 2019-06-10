@@ -11,23 +11,26 @@ import { UserSchema } from '../../modules/users/schemas/user.schema';
 
 @Injectable()
 export class TokenMiddleware implements NestMiddleware {
-	private userModel;
-	constructor() {
-	}	
-  	async use(req: Request, res: Response, next: Function) {
-		const db = req['dbConnection'];
+    private userModel;
+    constructor() {
+        console.log('Token middleware called');
+    }
+    async use(req: Request, res: Response, next: Function) {
+        const db = req['dbConnection'];
         this.userModel = db.model(USER_MODEL_TOKEN, UserSchema) as Model<IUser>;
-		req.user = {};
-		let parsedToken = {};
-		const token: any = req.headers.authorization || req.headers.Authorization;
-		if (token) {
-			try {
-				parsedToken = verify(token, SERVER_CONFIG.jwtSecret);
-				req.user =  await this.userModel.findById(parsedToken['_id']).select('-salt -password');
-			} catch (ex) {
-				return res.status(500).send(ex);
-			}
-		}
-		next();
-	}
+        req.user = {};
+        let parsedToken = {};
+        const token: any = req.headers.authorization || req.headers.Authorization;
+
+        if (token) {
+            try {
+                parsedToken = verify(token, SERVER_CONFIG.jwtSecret);
+                const user = await this.userModel.findById(parsedToken['_id']).select('-salt -password');
+                req.user = user;
+            } catch (ex) {
+                return res.status(500).send(ex);
+            }
+        }
+        next();
+    }
 }

@@ -4,19 +4,20 @@ import {
     Injectable
 } from '@nestjs/common';
 import { validate } from 'joi';
-import { articleSchema } from './../joi/article.joi';
+import { authLoginSchema } from '../joi/login-user.joi';
 
 @Injectable()
 /**
- *  Article By Id Middleware
+ *  LoginValidator Middleware
  *  We validating if the Id provided is valid, and returning the found article in the variable req.article
  */
-export class ArticleValidatorMiddleware implements NestMiddleware {
+export class LoginValidatorMiddleware implements NestMiddleware {
     constructor() {
-        console.log('Article Validator is called');
+        console.log('Initializing Login Validator Middleware');
     }
     async use(req, res, next: Function) {
-        const result = validate(req.body, articleSchema);
+        const result = validate(req.body, authLoginSchema);
+
         if (result.error) {
             const errorMessage = result.error.details.shift().message;
             const message: string = errorMessage.replace(/["]/g, '');

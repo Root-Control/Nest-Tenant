@@ -2,10 +2,11 @@
     "telemetry.machineId": "47ce882325e180177140475cfea3c09a4d61104b26f1723ce1fe347b6e012b4f",
     "openedPathsList": {
         "workspaces3": [
+            "file:///home/hiroshi/Projects/nest-condominios/nest-module-writter",
+            "file:///home/hiroshi/Projects/Architectures/Nest-Tenant",
             "file:///home/hiroshi/Projects/etd/ETD_SERVER",
             "file:///home/hiroshi/Projects/nest-condominios",
-            "file:///home/hiroshi/Projects/condominiums",
-            "file:///home/hiroshi/Projects/Architectures/Nest-Tenant"
+            "file:///home/hiroshi/Projects/condominiums"
         ],
         "files2": []
     },
@@ -52,13 +53,35 @@
                                     "id": "openRecentFolder",
                                     "uri": {
                                         "$mid": 1,
-                                        "fsPath": "/home/hiroshi/Projects/etd/ETD_SERVER",
+                                        "fsPath": "/home/hiroshi/Projects/Architectures/Nest-Tenant",
+                                        "external": "file:///home/hiroshi/Projects/Architectures/Nest-Tenant",
+                                        "path": "/home/hiroshi/Projects/Architectures/Nest-Tenant",
+                                        "scheme": "file"
+                                    },
+                                    "enabled": true,
+                                    "label": "/home/hiroshi/Projects/Architectures/Nest-Tenant"
+                                },
+                                {
+                                    "id": "openRecentFolder",
+                                    "uri": {
+                                        "$mid": 1,
+                                        "external": "file:///home/hiroshi/Projects/nest-condominios/nest-module-writter",
+                                        "path": "/home/hiroshi/Projects/nest-condominios/nest-module-writter",
+                                        "scheme": "file"
+                                    },
+                                    "enabled": true,
+                                    "label": "/home/hiroshi/Projects/nest-condominios/nest-module-writter"
+                                },
+                                {
+                                    "id": "openRecentFolder",
+                                    "uri": {
+                                        "$mid": 1,
                                         "external": "file:///home/hiroshi/Projects/etd/ETD_SERVER",
                                         "path": "/home/hiroshi/Projects/etd/ETD_SERVER",
                                         "scheme": "file"
                                     },
                                     "enabled": true,
-                                    "label": "~/Projects/etd/ETD_SERVER"
+                                    "label": "/home/hiroshi/Projects/etd/ETD_SERVER"
                                 },
                                 {
                                     "id": "openRecentFolder",
@@ -69,7 +92,7 @@
                                         "scheme": "file"
                                     },
                                     "enabled": true,
-                                    "label": "~/Projects/nest-condominios"
+                                    "label": "/home/hiroshi/Projects/nest-condominios"
                                 },
                                 {
                                     "id": "openRecentFolder",
@@ -80,18 +103,7 @@
                                         "scheme": "file"
                                     },
                                     "enabled": true,
-                                    "label": "~/Projects/condominiums"
-                                },
-                                {
-                                    "id": "openRecentFolder",
-                                    "uri": {
-                                        "$mid": 1,
-                                        "external": "file:///home/hiroshi/Projects/Architectures/Nest-Tenant",
-                                        "path": "/home/hiroshi/Projects/Architectures/Nest-Tenant",
-                                        "scheme": "file"
-                                    },
-                                    "enabled": true,
-                                    "label": "~/Projects/Architectures/Nest-Tenant"
+                                    "label": "/home/hiroshi/Projects/condominiums"
                                 },
                                 {
                                     "id": "vscode.menubar.separator"
@@ -1397,17 +1409,17 @@
     },
     "theme": "vs-dark",
     "themeBackground": "#1e1e1e",
-    "pickerWorkingDir": "/home/hiroshi/Projects/etd",
+    "pickerWorkingDir": "/home/hiroshi/Projects/nest-condominios",
     "windowsState": {
         "lastActiveWindow": {
-            "folder": "file:///home/hiroshi/Projects/etd/ETD_SERVER",
-            "backupPath": "/home/hiroshi/Projects/Architectures/Nest-Tenant/~/.vscode-root/Backups/9edb9276a9d3446ce0ac57bb5a4bc99b",
+            "folder": "file:///home/hiroshi/Projects/Architectures/Nest-Tenant",
+            "backupPath": "/home/hiroshi/Projects/Architectures/Nest-Tenant/~/.vscode-root/Backups/86c5f9ab0d9281a1fb9e372f381f029d",
             "uiState": {
                 "mode": 0,
-                "x": 65,
+                "x": 1600,
                 "y": 24,
-                "width": 1535,
-                "height": 876
+                "width": 1920,
+                "height": 1056
             }
         },
         "openedWindows": []

@@ -16,23 +16,23 @@ import { TenantMiddleware } from './common/middlewares/tenant.middleware';
 import { TokenMiddleware } from './common/middlewares/token.middleware';
 
 @Module({
-	imports: [
-		DatabaseModule,
-		UsersModule,
-		ArticlesModule,
-		AuthModule
-	],
-	controllers: [
-	],
-	providers: [
-		AppGateway
-	]
+    imports: [
+        DatabaseModule,
+        UsersModule,
+        ArticlesModule,
+        AuthModule
+    ],
+    controllers: [
+    ],
+    providers: [
+        AppGateway
+    ]
 })
 
 export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(LoggerMiddleware, TenantMiddleware, TokenMiddleware)
-      .forRoutes('*');
-  }
+    configure(consumer: MiddlewareConsumer) {
+        consumer
+            .apply(LoggerMiddleware, TenantMiddleware, TokenMiddleware)
+            .forRoutes('*');
+    }
 }

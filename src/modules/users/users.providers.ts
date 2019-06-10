@@ -7,5 +7,3 @@ export const userProviders = [{
         useFactory: (connection: Connection) => connection.model('User', UserSchema),
         inject: [DB_CONNECTION_TOKEN]
 }];
-
-console.log(userProviders);

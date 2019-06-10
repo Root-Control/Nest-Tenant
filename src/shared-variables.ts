@@ -6,12 +6,14 @@ import { BehaviorSubject } from 'rxjs';
  *  Function for local Observable Variables
  */
 export class SharedVariables {
-	constructor() {}
-  private simpleCounter = new BehaviorSubject<number>(0);
+    constructor() {
+        console.log('Global Variable Handler');
+    }
+    private simpleCounter = new BehaviorSubject<number>(0);
 
-  currentCounterValue = this.simpleCounter.asObservable();
+    currentCounterValue = this.simpleCounter.asObservable();
 
-  changeCounterValue(number: number) {
-    this.simpleCounter.next(number);
-  }
+    changeCounterValue(number: number) {
+        this.simpleCounter.next(number);
+    }
 }

@@ -10,70 +10,72 @@ import { UserSchema } from '../../users/schemas/user.schema';
 
 import { Request } from 'express';
 
-const FacebookTokenStrategy = require('passport-facebook-token');
+import * as FacebookTokenStrategy from 'passport-facebook-token';
 
 @Injectable()
 export class FacebookStrategy {
-  private userModel;
-  constructor(@Inject(FACEBOOK_CONFIG_TOKEN) private readonly fbConfig: IFacebookConfig) {
-    this.init();
-  }
+    private userModel;
+    constructor(@Inject(FACEBOOK_CONFIG_TOKEN) private readonly fbConfig: IFacebookConfig) {
+        this.init();
+    }
 
-  private init(): void {
-    use('facebook', new FacebookTokenStrategy({
-      passReqToCallback: true,
-      clientID: this.fbConfig.client_id,
-      clientSecret: this.fbConfig.client_secret,
-      profileFields: ['id', 'name', 'displayName', 'emails', 'photos']
-    }, async (req: Request, accessToken: string, refreshToken: string, profile: any, done: Function) => {
-      try {
-        const db = req['dbConnection'];
-        this.userModel = db.model(USER_MODEL_TOKEN, UserSchema) as Model<IUser>;
-        var providerData = profile._json;
-        providerData.accessToken = accessToken;
-        providerData.refreshToken = refreshToken;
+    private init(): void {
+        use('facebook', new FacebookTokenStrategy({
+            passReqToCallback: true,
+            clientID: this.fbConfig.client_id,
+            clientSecret: this.fbConfig.client_secret,
+            profileFields: ['id', 'name', 'displayName', 'emails', 'photos']
+        }, async (req: Request, accessToken: string, refreshToken: string, profile: any, done: Function) => {
+            try {
+                const db = req['dbConnection'];
+                this.userModel = db.model(USER_MODEL_TOKEN, UserSchema) as Model<IUser>;
+                const providerData = profile._json;
+                providerData.accessToken = accessToken;
+                providerData.refreshToken = refreshToken;
 
-        let email: string = profile.emails.shift().value;
+                let email: string = profile.emails.shift().value;
 
-        //  Conditional if facebook doesn't return email
-        if (!email || email === '') email = `${profile.id}@${profile.provider}.com`;
+                //  Conditional if facebook doesn't return email
+                if (!email || email === '') {
+                    email = `${profile.id}@${profile.provider}.com`;
+                }
 
-        const existingUser: IUser = await this.userModel.findOne({ email: email });
+                const existingUser: IUser = await this.userModel.findOne({ email });
 
-        if (existingUser) {
-          return done(null, existingUser);
-        }
-  
-        var providerUserProfile = {
-          firstName: profile.name.givenName,
-          lastName: profile.name.familyName,
-          displayName: profile.displayName,
-          email: email,
-          username: profile.username || `${profile.id}`,
-          profileImageURL: (profile.id) ? '//graph.facebook.com/' + profile.id + '/picture?type=large' : undefined,
-          provider: 'facebook',
-          providerIdentifierField: 'id',
-          providerData: providerData
-        };
+                if (existingUser) {
+                    return done(null, existingUser);
+                }
 
-        const user = new this.userModel(providerUserProfile);
-        
-        done(null, await user.save());
-      } catch (err) {
-        done(err, null);
-      }
+                const providerUserProfile = {
+                    firstName: profile.name.givenName,
+                    lastName: profile.name.familyName,
+                    displayName: profile.displayName,
+                    email,
+                    username: profile.username || `${profile.id}`,
+                    profileImageURL: (profile.id) ? '//graph.facebook.com/' + profile.id + '/picture?type=large' : undefined,
+                    provider: 'facebook',
+                    providerIdentifierField: 'id',
+                    providerData
+                };
 
-      function generateUsername(profile) {
-        var username = '';
+                const user = new this.userModel(providerUserProfile);
 
-        if (profile.emails) {
-          username = profile.emails[0].value.split('@')[0];
-        } else if (profile.name) {
-          username = profile.name.givenName[0] + profile.name.familyName;
-        }
+                done(null, await user.save());
+            } catch (err) {
+                done(err, null);
+            }
 
-        return username.toLowerCase() || undefined;
-      }
-    }));
-  }
+            const generateUsername = userProfile => {
+                let username = '';
+
+                if (userProfile.emails) {
+                    username = userProfile.emails[0].value.split('@')[0];
+                } else if (userProfile.name) {
+                    username = userProfile.name.givenName[0] + userProfile.name.familyName;
+                }
+
+                return username.toLowerCase() || undefined;
+            };
+        }));
+    }
 }

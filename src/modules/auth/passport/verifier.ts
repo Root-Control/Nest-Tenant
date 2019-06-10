@@ -7,12 +7,17 @@ import { MESSAGES, USER_MODEL_TOKEN } from '../../../server.constants';
 
 @Injectable()
 export class Verifier implements NestMiddleware {
-  constructor() {}
+    constructor() {
+        console.log('User Verification middleware');
+    }
     async use(req: Request, res: Response, next: Function) {
-		const db = req['dbConnection'];
-		this.userModel = db.model(USER_MODEL_TOKEN, UserSchema) as Model<IUser>;
-		const user = await this.userModel.findOne({ email: req.body.email });
-		if (!user) next();
-		else return next(new UnauthorizedException(MESSAGES.UNAUTHORIZED_EMAIL_OR_USERNAME_IN_USE));
-    };
+        const db = req['dbConnection'];
+        const userModel = db.model(USER_MODEL_TOKEN, UserSchema) as Model<IUser>;
+        const user = await userModel.findOne({ email: req.body.email });
+        if (!user) {
+            next();
+        } else {
+            return next(new UnauthorizedException(MESSAGES.UNAUTHORIZED_EMAIL_OR_USERNAME_IN_USE));
+        }
+    }
 }
